@@ -1,0 +1,7 @@
+name: simple-app
+channels:
+  - conda-forge
+dependencies:
+  - python=3.13.3
+  - fastapi==0.115.12
+  - pytest==8.3.5
