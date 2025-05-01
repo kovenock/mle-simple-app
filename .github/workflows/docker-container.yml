@@ -1,0 +1,33 @@
+name: Docker container API
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag simple-app:$(date +%s)
+    - name: Run the Docker container
+      run: docker run -d -p 8080:8080 simple-app:$(date +%s)
+      sleep: 10 # Wait for the container to start
+
+    - name: Test the API
+      run: pytest test_container.py --base-url http://localhost:8080
+
+    - name: Stop the Docker container and delete the image
+      run: |
+        docker stop $(docker ps -q) # Stop all running containers
+        docker rmi simple-app:$(date +%s) # Remove the image
+      if: always() # Ensure this step runs even if previous steps fail
