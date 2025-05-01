@@ -18,16 +18,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag simple-app:$(date +%s)
+      run: docker build -t simple-app .
     - name: Run the Docker container
-      run: docker run -d -p 8080:8080 simple-app:$(date +%s)
-      sleep: 10 # Wait for the container to start
-
+      run: |
+        docker run -d --name simple-app-container -p 80:80 simple-app
+        sleep 10 # Wait for the container to start
     - name: Test the API
-      run: pytest test_container.py --base-url http://localhost:8080
-
+      run: pytest tests/test_container.py --base-url http://localhost:8080
     - name: Stop the Docker container and delete the image
       run: |
         docker stop $(docker ps -q) # Stop all running containers
-        docker rmi simple-app:$(date +%s) # Remove the image
+        docker container prune -f # Remove all stopped containers
+        docker image prune -a -f # Remove all unused images
       if: always() # Ensure this step runs even if previous steps fail
