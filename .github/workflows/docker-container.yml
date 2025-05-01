@@ -32,7 +32,7 @@ jobs:
         docker run -d --name simple-app-container -p 80:80 simple-app
         sleep 10 # Wait for the container to start
     - name: Test the API
-      run: pytest tests/test_container.py --base-url http://localhost:8080
+      run: pytest tests/test_container.py --base-url http://localhost:80
     - name: Stop the Docker container and delete the image
       run: |
         docker stop $(docker ps -q) # Stop all running containers
