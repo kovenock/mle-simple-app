@@ -1,5 +1,7 @@
 # Simple App Example
 
+Example of setting up a cloud native application using FastAPI, Docker, Pytest, GitHub Actions, and Kubernetes.
+
 ## Create virtual environment
 ```shell
 conda env create -f environment.yml
@@ -49,3 +51,14 @@ curl -X 'POST' \
   "value": 100
 }'
 ```
+
+## GitHub Actions
+Several tests will run when there is a push or pull request to the git main branch.
+These are defined in [./github/workflows/](.github/workflows/) and include:
+
+- run pytests (see [./tests/](tests/))
+- build and test docker container
+
+## Next Steps
+1. Set up local Kubernetes cluster using Minikube. Deploy containerized app.
+2. Update set up to include more than one microservice.
